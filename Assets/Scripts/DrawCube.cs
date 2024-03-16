@@ -1,5 +1,8 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -10,15 +13,34 @@ public class DrawCube : MonoBehaviour
     [SerializeField]
     [Range(0, 360)]
     float angle = 0;
-    [SerializeField] Vector3 axis = new(0, 1, 0);
+    [SerializeField] Vector3 axis = Vector3.zero;
+    [SerializeField] Slider angleSlider;
+    [SerializeField] Toggle toggleX;
+    [SerializeField] Toggle toggleY;
+    [SerializeField] Toggle toggleZ;
+    private int axisX = 0;
+    private int axisY = 0;
+    private int axisZ = 0;
 
     [Header("Scale component")]
     [SerializeField] Vector3 scale = Vector3.one;
     ScaleManager myScale = new();
+    [SerializeField] TMP_InputField scaleX;
+    [SerializeField] TMP_InputField scaleY;
+    [SerializeField] TMP_InputField scaleZ;
+    private float scX;
+    private float scY;
+    private float scZ;
 
     [Header("Position component")]
     [SerializeField] Vector3 position = Vector3.zero;
     PositionManager myPos = new();
+    [SerializeField] TMP_InputField positionX;
+    [SerializeField] TMP_InputField positionY;
+    [SerializeField] TMP_InputField positionZ;
+    private int posX;
+    private int posY;
+    private int posZ;
 
     private LineRenderer lineRenderer;
 
@@ -38,15 +60,96 @@ public class DrawCube : MonoBehaviour
     private void Start()
     {
         lineRenderer = GetComponent<LineRenderer>();
+        scaleX.text = "1"; scaleY.text = "1"; scaleZ.text = "1";   
+        positionX.text = "0"; positionY.text = "0"; positionZ.text = "0";
     }
 
     private void Update()
     {
+
+        Convertion();
         RestartCubePosition();
         RotationCube();
         ResizeCube();
         SetPosition();
         DrawCube3D();
+    }
+
+    private void Convertion()
+    {
+        //equals the value on slider to value in angle, later took a toogle to know through which one axis rotate
+        angle = angleSlider.value;
+        if (toggleX.isOn)
+            axisX = 1;
+        else axisX = 0;
+        if (toggleY.isOn)
+            axisY = 1;
+        else axisY = 0;
+        if (toggleZ.isOn)
+            axisZ = 1;
+        else axisZ = 0;
+        axis = new(axisX, axisY, axisZ);
+
+        //Converts Scale input field on float values
+        try
+        {
+            scX = float.Parse(scaleX.text);
+        }
+        catch (SystemException)
+        {
+            scX = 1;
+        }
+
+        try
+        {
+            scY = float.Parse(scaleY.text);
+        }
+        catch (SystemException)
+        {
+            scY = 1;
+        }
+
+        try
+        {
+            scZ = float.Parse(scaleZ.text);
+        }
+        catch (SystemException)
+        {
+            scZ = 1;
+        }
+
+        scale = new(scX, scY, scZ);
+
+        //Transforms position values in input field on int values
+        try
+        {
+            posX = int.Parse(positionX.text);
+        }
+        catch (SystemException)
+        {
+            posX = 0;
+        }
+
+        try
+        {
+            posY = int.Parse(positionY.text);
+        }
+        catch (SystemException)
+        {
+            posY = 0;
+        }
+
+        try
+        {
+            posZ = int.Parse(positionZ.text);
+        }
+        catch (SystemException)
+        {
+            posZ = 0;
+        }
+
+
+        position = new(posX, posY, posZ);
     }
 
     private void RestartCubePosition()
