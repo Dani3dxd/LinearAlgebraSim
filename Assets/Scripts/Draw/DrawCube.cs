@@ -12,9 +12,10 @@ public class DrawCube : MonoBehaviour
     [Header("Quaterion component")]
     [SerializeField]
     [Range(0, 360)]
-    float angle = 0;
+    float angle = 0.00f;
     [SerializeField] Vector3 axis = Vector3.zero;
     [SerializeField] Slider angleSlider;
+    [SerializeField] TextMeshProUGUI valueAngle;
     [SerializeField] Toggle toggleX;
     [SerializeField] Toggle toggleY;
     [SerializeField] Toggle toggleZ;
@@ -74,11 +75,14 @@ public class DrawCube : MonoBehaviour
         SetPosition();
         DrawCube3D();
     }
-
+    /// <summary>
+    /// Converts all values that it gets in canvas to a number that it can use to replace values in the code
+    /// </summary>
     private void Convertion()
     {
         //equals the value on slider to value in angle, later took a toogle to know through which one axis rotate
         angle = angleSlider.value;
+        valueAngle.text = angle.ToString("F1");//Use "F1" to put one decimmal after point, you can change the value to get more numbers after decimmal point
         if (toggleX.isOn)
             axisX = 1;
         else axisX = 0;

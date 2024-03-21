@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 public class RotationManager : MonoBehaviour
 {
@@ -13,7 +14,8 @@ public class RotationManager : MonoBehaviour
         {0,1}
     });
 
-    [SerializeField] Slider angleSlider; 
+    [SerializeField] Slider angleSlider;
+    [SerializeField] private TextMeshProUGUI angleValue;
 
     Vector2 initPos = new Vector2();
 
@@ -32,6 +34,9 @@ public class RotationManager : MonoBehaviour
 
         // actualizo el angle desde el UI
         angle = angleSlider.value;
+
+        // asigno el valor del angulo obtenido al textmeshpro del canvas
+        angleValue.text = angle.ToString();
 
         // calculos para la matriz
         float cos = Mathf.Cos(angle*Mathf.PI/180f);
